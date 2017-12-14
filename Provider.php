@@ -9,7 +9,7 @@ use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 
 class Provider extends AbstractProvider implements ProviderInterface
 {
-    protected $fields = ['uid', 'email', 'first_name', 'last_name', 'screen_name', 'photo_max'];
+    protected $fields = ['uid', 'email', 'first_name', 'last_name', 'screen_name', 'photo_max', 'bdate'];
 
     /**
      * Unique Provider Identifier.
@@ -66,6 +66,7 @@ class Provider extends AbstractProvider implements ProviderInterface
             'name' => trim(Arr::get($user, 'first_name') . ' ' . Arr::get($user, 'last_name')),
             'email' => Arr::get($user, 'email'),
             'avatar' => Arr::get($user, 'photo_max'),
+            'bdate' => array_key_exists('bdate', $user) ? Arr::get($user, 'bdate') : null
         ]);
     }
 
