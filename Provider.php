@@ -64,7 +64,7 @@ class Provider extends AbstractProvider implements ProviderInterface
             'id' => Arr::get($user, 'uid'),
             'nickname' => Arr::get($user, 'screen_name'),
             'name' => trim(Arr::get($user, 'first_name') . ' ' . Arr::get($user, 'last_name')),
-            'email' => array_key_exists('photo_max', $user) ? Arr::get($user, 'email')  : null,
+            'email' => array_key_exists('email', $user) ? Arr::get($user, 'email')  : null,
             'avatar' => array_key_exists('photo_max', $user) ? Arr::get($user, 'photo_max') : null,
             'bdate' => array_key_exists('bdate', $user) ? Arr::get($user, 'bdate') : null
         ]);
