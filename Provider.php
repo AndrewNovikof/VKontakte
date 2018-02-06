@@ -46,8 +46,10 @@ class Provider extends AbstractProvider implements ProviderInterface
     {
         $lang = $this->getConfig('lang');
         $lang = $lang ? '&language=' . $lang : '';
+        $version = $this->getConfig('version');
+        $version = $version ? '&v=' . $version : '';
         $response = $this->getHttpClient()->get(
-            'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang
+            'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
         );
 
         $response = json_decode($response->getBody()->getContents(), true)['response'][0];
