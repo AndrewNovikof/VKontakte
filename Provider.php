@@ -3,6 +3,7 @@
 namespace SocialiteProviders\VKontakte;
 
 use Illuminate\Support\Arr;
+use SocialiteProviders\Manager\Exception\InvalidArgumentException;
 use SocialiteProviders\Manager\OAuth2\User;
 use Laravel\Socialite\Two\ProviderInterface;
 use SocialiteProviders\Manager\OAuth2\AbstractProvider;
@@ -52,7 +53,11 @@ class Provider extends AbstractProvider implements ProviderInterface
             'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
         );
 
-        $response = json_decode($response->getBody()->getContents(), true)['response'][0];
+        try {
+            $response = json_decode($response->getBody()->getContents(), true)['response'][0];
+        } catch (\Exception $exception) {
+            throw new InvalidArgumentException(json_decode($response->getBody()->getContents(), true));
+        }
 
         return $response;
     }
