@@ -58,13 +58,13 @@ class Provider extends AbstractProvider implements ProviderInterface
             throw new RequestException($exception->getResponse()->getBody(), $exception->getRequest());
         }
         try {
-            $response = json_decode($response->getBody()->getContents(), true)['response'][0];
+            $data = json_decode($response->getBody()->getContents(), true)['response'][0];
         } catch (\Exception $exception) {
             $error = json_decode($response->getBody()->getContents(), true)['error'];
             throw new \Exception($error);
         }
 
-        return $response;
+        return $data;
     }
 
     /**
