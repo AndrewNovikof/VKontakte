@@ -60,7 +60,8 @@ class Provider extends AbstractProvider implements ProviderInterface
         try {
             $response = json_decode($response->getBody()->getContents(), true)['response'][0];
         } catch (\Exception $exception) {
-            throw new InvalidArgumentException($response->getBody()->getContents());
+            $error = json_decode($response->getBody()->getContents(), true)['error'];
+            throw new InvalidArgumentException($error);
         }
 
         return $response;
