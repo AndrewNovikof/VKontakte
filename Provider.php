@@ -46,19 +46,21 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
+        $lang = $this->getConfig('lang');
+        $lang = $lang ? '&language=' . $lang : '';
+        $version = $this->getConfig('version');
+        $version = $version ? '&v=5.73' : '';
         try {
-            $lang = $this->getConfig('lang');
-            $lang = $lang ? '&language=' . $lang : '';
-            $version = $this->getConfig('version');
-            $version = $version ? '&v=5.73' : '';
             $response = $this->getHttpClient()->get(
                 'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
             );
-            $response = json_decode($response->getBody()->getContents(), true)['response'][0];
         } catch (RequestException $exception) {
-            throw new RequestException(json_decode($exception->getResponse()->getBody(), true), $exception->getRequest());
+            throw new RequestException($exception->getResponse()->getBody(), $exception->getRequest());
+        }
+        try {
+            $response = json_decode($response->getBody()->getContents(), true)['response'][0];
         } catch (\Exception $exception) {
-            throw new InvalidArgumentException(json_decode($response->getBody()->getContents(), true));
+            throw new InvalidArgumentException($response->getBody()->getContents());
         }
 
         return $response;
