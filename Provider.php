@@ -46,18 +46,17 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $lang = $this->getConfig('lang');
-        $lang = $lang ? '&language=' . $lang : '';
-        $version = $this->getConfig('version');
-        $version = $version ? '&v=5.73' : '';
-        $response = $this->getHttpClient()->get(
-            'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
-        );
-
         try {
+            $lang = $this->getConfig('lang');
+            $lang = $lang ? '&language=' . $lang : '';
+            $version = $this->getConfig('version');
+            $version = $version ? '&v=5.73' : '';
+            $response = $this->getHttpClient()->get(
+                'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
+            );
             $response = json_decode($response->getBody()->getContents(), true)['response'][0];
-        } catch (RequestException $exception){
-            throw new RequestException($exception->getResponse()->getBody(), $exception->getRequest());
+        } catch (RequestException $exception) {
+            throw new RequestException(json_decode($exception->getResponse()->getBody(), true), $exception->getRequest());
         } catch (\Exception $exception) {
             throw new InvalidArgumentException(json_decode($response->getBody()->getContents(), true));
         }
@@ -74,7 +73,7 @@ class Provider extends AbstractProvider implements ProviderInterface
             'id' => Arr::get($user, 'uid'),
             'nickname' => Arr::get($user, 'screen_name'),
             'name' => trim(Arr::get($user, 'first_name') . ' ' . Arr::get($user, 'last_name')),
-            'email' => array_key_exists('email', $user) ? Arr::get($user, 'email')  : null,
+            'email' => array_key_exists('email', $user) ? Arr::get($user, 'email') : null,
             'avatar' => array_key_exists('photo_max_orig', $user) ? Arr::get($user, 'photo_max_orig') : null,
             'bdate' => array_key_exists('bdate', $user) ? Arr::get($user, 'bdate') : null
         ]);
