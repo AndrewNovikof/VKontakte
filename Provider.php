@@ -51,16 +51,16 @@ class Provider extends AbstractProvider implements ProviderInterface
         $version = $this->getConfig('version');
         $version = $version ? '&v=5.73' : '';
         try {
-            $response = $this->getHttpClient()->get(
+            $response = json_decode($this->getHttpClient()->get(
                 'https://api.vk.com/method/users.get?access_token=' . $token . '&fields=' . implode(',', $this->fields) . $lang . $version
-            );
+            )->getBody()->getContents(), true);
         } catch (RequestException $exception) {
             throw new RequestException($exception->getResponse()->getBody(), $exception->getRequest());
         }
         try {
-            $data = json_decode($response->getBody()->getContents(), true)['response'][0];
+            $data = $response['response'][0];
         } catch (\Exception $exception) {
-            throw new \Exception($response->getBody()->getContents());
+            throw new \Exception($response['error']['error_msg']);
         }
 
         return $data;
