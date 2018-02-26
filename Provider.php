@@ -2,6 +2,7 @@
 
 namespace SocialiteProviders\VKontakte;
 
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Arr;
 use SocialiteProviders\Manager\Exception\InvalidArgumentException;
 use SocialiteProviders\Manager\OAuth2\User;
@@ -55,6 +56,8 @@ class Provider extends AbstractProvider implements ProviderInterface
 
         try {
             $response = json_decode($response->getBody()->getContents(), true)['response'][0];
+        } catch (RequestException $exception){
+            throw new RequestException($exception->getResponse()->getBody(), $exception->getRequest());
         } catch (\Exception $exception) {
             throw new InvalidArgumentException(json_decode($response->getBody()->getContents(), true));
         }
