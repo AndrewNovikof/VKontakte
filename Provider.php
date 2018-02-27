@@ -11,7 +11,7 @@ use SocialiteProviders\Manager\OAuth2\AbstractProvider;
 
 class Provider extends AbstractProvider implements ProviderInterface
 {
-    protected $fields = ['uid', 'email', 'first_name', 'last_name', 'screen_name', 'photo_max_orig', 'bdate'];
+    protected $fields = ['uid', 'email', 'first_name', 'last_name', 'screen_name', 'photo_max_orig', 'bdate', 'sex'];
 
     /**
      * Unique Provider Identifier.
