@@ -46,9 +46,9 @@ class Provider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $lang = $this->getConfig('lang');
+        $lang = $this->getConfig('vk.lang');
         $lang = $lang ? '&language=' . $lang : '';
-        $version = $this->getConfig('version');
+        $version = $this->getConfig('vk.version');
         $version = $version ?: '&v=5.73';
         try {
             $response = json_decode($this->getHttpClient()->get(
@@ -72,7 +72,7 @@ class Provider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User())->setRaw($user)->map([
-            'id' => Arr::get($user, 'uid'),
+            'id' => Arr::get($user, 'id'),
             'nickname' => Arr::get($user, 'screen_name'),
             'name' => trim(Arr::get($user, 'first_name') . ' ' . Arr::get($user, 'last_name')),
             'email' => array_key_exists('email', $user) ? Arr::get($user, 'email') : null,
